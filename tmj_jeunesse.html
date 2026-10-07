@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TMJ Jeunesse — Plateforme éducative</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#17324d;background:#f5f9ff}
+header{background:#0b5ed7;color:white;padding:15px 5%;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20}
+.logo{font-size:23px;font-weight:800}nav{display:flex;gap:14px;align-items:center;flex-wrap:wrap}nav a{color:white;text-decoration:none;font-weight:600}
+.lang{background:white;color:#0b5ed7;border:0;border-radius:9px;padding:9px 12px;font-weight:bold;cursor:pointer}.menu{display:none;background:none;border:0;color:white;font-size:26px}
+.hero{padding:65px 5%;background:linear-gradient(135deg,#0b5ed7,#35a7ff);color:white;display:flex;gap:35px;align-items:center;flex-wrap:wrap}
+.hero-text{flex:1;min-width:280px}.hero h1{font-size:43px;margin:0 0 15px}.hero p{font-size:19px;line-height:1.6}
+.hero-card{flex:1;min-width:280px;background:white;color:#17324d;border-radius:24px;padding:28px;box-shadow:0 15px 40px #06458c55}
+.btn{display:inline-block;border:0;border-radius:11px;padding:12px 18px;font-weight:700;text-decoration:none;cursor:pointer;margin:4px}.primary{background:#ffcc33;color:#17324d}.secondary{background:white;color:#0b5ed7}
+section{padding:50px 5%}.title{text-align:center;margin-bottom:28px}.title h2{font-size:30px;margin:0 0 8px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{background:white;border-radius:17px;padding:22px;box-shadow:0 5px 20px #17324d12}.icon{font-size:38px}.card h3{margin:10px 0 7px}
+.category{margin:35px 0 15px;color:#0b5ed7;border-left:5px solid #0b5ed7;padding-left:12px}
+.subject{min-height:160px}.subject button{margin-top:8px}
+.search{max-width:700px;margin:0 auto 25px;display:flex}.search input{flex:1;padding:14px;border:1px solid #ccd8e5;border-radius:11px 0 0 11px;font-size:16px}.search button{border:0;background:#0b5ed7;color:white;padding:0 20px;border-radius:0 11px 11px 0}
+.notice{background:#fff8dc;border-left:5px solid #ffcc33;padding:15px;border-radius:10px;margin:20px 0}
+.cta{background:#e8f2ff;text-align:center;border-radius:22px;padding:40px}.hidden{display:none}
+footer{background:#102a43;color:white;text-align:center;padding:30px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}nav{display:none}.menu{display:block}}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.hero h1{font-size:34px}.hero{padding-top:42px}}
+
+.modal{display:none;position:fixed;inset:0;background:#102a4390;z-index:100;padding:20px;overflow:auto}
+.modal.show{display:flex;align-items:center;justify-content:center}
+.modal-box{background:white;width:min(760px,100%);max-height:90vh;overflow:auto;border-radius:22px;padding:28px;position:relative;box-shadow:0 20px 60px #0005}
+.close{position:absolute;right:15px;top:10px;border:0;background:#eef4fa;border-radius:50%;width:38px;height:38px;font-size:25px;cursor:pointer}
+.lesson{display:block;width:100%;text-align:left;padding:14px;margin:8px 0;border:1px solid #d8e3ee;background:#f7fbff;border-radius:10px;cursor:pointer;font-weight:600;color:#17324d}
+.lesson:hover{background:#e8f2ff}
+.exercise-box{margin-top:22px;padding:18px;background:#fff8dc;border-left:5px solid #ffcc33;border-radius:10px}
+
+.example-box{margin:18px 0;padding:14px;background:#eef7ff;border-radius:10px;border-left:4px solid #0b5ed7}
+#lessonText{line-height:1.65}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">🎓 TMJ Jeunesse</div>
+<nav>
+<a href="#accueil">Accueil</a><a href="#niveaux">Niveaux</a><a href="#cours">Cours</a><a href="#filieres">Filières</a><a href="#quiz">Quiz</a><a href="#apropos">À propos</a>
+<button class="lang" onclick="toggleLanguage()">🇬🇧 English</button>
+</nav>
+<button class="menu" id="mobileMenuBtn" type="button" aria-label="Menu">☰</button>
+</header>
+
+<main>
+<section class="hero" id="accueil">
+<div class="hero-text">
+<h1 id="heroTitle">Apprends, révise et construis ton avenir !</h1>
+<p id="heroText">TMJ Jeunesse rassemble des cours, exercices et ressources du primaire à l'université, avec des parcours généraux et techniques.</p>
+<a class="btn primary" href="#cours" id="startBtn">Commencer les cours</a>
+<a class="btn secondary" href="#filieres" id="pathBtn">Découvrir les filières</a>
+</div>
+<div class="hero-card">
+<div style="font-size:62px;text-align:center">📚 🧠 💻 🔧 🎓</div>
+<h2 id="spaceTitle">Ton espace d'apprentissage</h2>
+<p id="spaceText">Mathématiques, langues, sciences, technologie, technique, économie, entrepreneuriat et bien plus.</p>
+</div>
+</section>
+
+
+<section id="niveaux">
+<div class="title">
+<h2 id="levelsTitle">🎓 Choisis ton niveau d'études</h2>
+<p id="levelsText">Commence par choisir ton niveau pour découvrir les cours adaptés.</p>
+</div>
+<div class="grid tmj-level-grid">
+<button class="card tmj-level-card" type="button" onclick="setStudyLevel('primary'); tmjRenderLevelProgram('primary')">
+  <div class="icon">📘</div><h3>Primaire</h3><p>Du début de la scolarité aux bases essentielles.</p>
+</button>
+<button class="card tmj-level-card" type="button" onclick="setStudyLevel('middle'); tmjRenderLevelProgram('middle')">
+  <div class="icon">🏫</div><h3>Collège</h3><p>Consolide les connaissances et prépare la suite des études.</p>
+</button>
+<button class="card tmj-level-card" type="button" onclick="setStudyLevel('high'); tmjRenderLevelProgram('high')">
+  <div class="icon">🎓</div><h3>Lycée</h3><p>Approfondis les matières générales et prépare les examens.</p>
+</button>
+<button class="card tmj-level-card" type="button" onclick="setStudyLevel('university'); tmjRenderLevelProgram('university')">
+  <div class="icon">🏛️</div><h3>Université</h3><p>Développe des connaissances avancées et professionnelles.</p>
+</button>
+</div>
+<div id="tmjLevelNotice" class="tmj-level-notice"></div>
+<div id="tmjProgramPanel"></div>
+</section>
+
+<section id="cours">
+<div class="title"><h2>📚 Catalogue des cours</h2><p id="catalogText">Choisis une matière pour commencer.</p></div>
+
+<div class="tmj-level-filter">
+  <button type="button" class="tmj-level-filter-btn" data-level="all" onclick="setStudyLevel('all')">🌐 Tous</button>
+  <button type="button" class="tmj-level-filter-btn" data-level="primary" onclick="setStudyLevel('primary'); tmjRenderLevelProgram('primary')">📘 Primaire</button>
+  <button type="button" class="tmj-level-filter-btn" data-level="middle" onclick="setStudyLevel('middle'); tmjRenderLevelProgram('middle')">🏫 Collège</button>
+  <button type="button" class="tmj-level-filter-btn" data-level="high" onclick="setStudyLevel('high'); tmjRenderLevelProgram('high')">🎓 Lycée</button>
+  <button type="button" class="tmj-level-filter-btn" data-level="university" onclick="setStudyLevel('university'); tmjRenderLevelProgram('university')">🏛️ Université</button>
+</div>
+
+<div class="search"><input id="search" placeholder="Rechercher une matière..."><button onclick="searchCourses()">🔎</button></div>
+<div id="catalog"></div>
+</section>
+
+<section id="filieres">
+<div class="title"><h2>🎓 Filières et parcours</h2><p>Des ressources pour les parcours généraux et techniques.</p></div>
+<div class="grid">
+<div class="card"><div class="icon">📘</div><h3>Primaire</h3><p>Lecture, écriture, français, mathématiques, sciences, histoire-géographie, anglais et culture générale.</p></div>
+<div class="card"><div class="icon">🏫</div><h3>Collège</h3><p>Mathématiques, français, anglais, sciences, histoire-géographie, informatique, technologie et langues.</p></div>
+<div class="card"><div class="icon">🎓</div><h3>Lycée général</h3><p>Mathématiques, français, anglais, philosophie, sciences, histoire-géographie, économie et langues.</p></div>
+<div class="card"><div class="icon">🔧</div><h3>Technique industrielle</h3><p>Électricité, électronique, mécanique, maintenance, automatisme, dessin technique et technologie.</p></div>
+<div class="card"><div class="icon">🏗️</div><h3>Bâtiment & travaux publics</h3><p>Génie civil, construction, dessin technique, topographie, matériaux et sécurité.</p></div>
+<div class="card"><div class="icon">💼</div><h3>Gestion & commerce</h3><p>Comptabilité, économie, gestion, marketing, communication et entrepreneuriat.</p></div>
+</div>
+</section>
+
+<section id="quiz">
+<div class="title"><h2>🧠 Quiz du jour</h2><p>Teste tes connaissances.</p></div>
+<div class="card" style="max-width:700px;margin:auto;text-align:center">
+<h3 id="question">Combien font 7 × 8 ?</h3>
+<button class="btn primary" onclick="answer(54)">54</button>
+<button class="btn primary" onclick="answer(56)">56</button>
+<button class="btn primary" onclick="answer(64)">64</button>
+<p id="result" style="font-weight:bold"></p>
+</div>
+</section>
+
+<section id="apropos">
+<div class="cta"><h2>🌟 TMJ Jeunesse</h2><p>Une plateforme pensée pour apprendre, s'entraîner, découvrir des métiers et développer ses compétences.</p><button class="btn primary" id="joinBtn" type="button">Rejoindre TMJ Jeunesse</button></div>
+</section>
+</main>
+
+
+<div id="courseModal" class="modal" onclick="if(event.target===this)closeCourse()">
+<div class="modal-box">
+<button class="close" onclick="closeCourse()">×</button>
+<h2 id="courseTitle">📚 Cours</h2>
+<p id="courseIntro"></p>
+<h3>📚 Chapitres</h3>
+<div id="lessonList"></div>
+<div class="exercise-box"><h3>📝 Exercice</h3><p id="courseExercise"></p><button class="btn primary" id="exerciseActionBtn" type="button">Faire l'exercice</button></div>
+</div></div>
+<div id="lessonModal" class="modal" onclick="if(event.target===this)closeLesson()">
+<div class="modal-box tmj-lesson-modal">
+<button class="close" onclick="closeLesson()">×</button>
+<h2 id="lessonTitle">📖 Leçon</h2>
+<div id="lessonMeta" class="tmj-lesson-meta"></div>
+<div id="lessonObjective" class="tmj-section-box"></div>
+<div id="lessonText"></div>
+<div id="lessonExamples" class="tmj-section-box"></div>
+<div class="exercise-box">
+<h3 id="exerciseHeading">📝 Exercice</h3>
+<p id="lessonExercise"></p>
+<button id="showAnswerBtn" class="btn primary" onclick="showAnswer()">Afficher la correction</button>
+<div id="lessonAnswer" class="tmj-answer"></div>
+</div>
+<div id="lessonQuiz" class="tmj-quiz-box"></div>
+<button class="btn primary" onclick="closeLesson()">J'ai compris ✓</button>
+</div></div>
+<footer>🎓 <strong>TMJ Jeunesse</strong><br><br>© 2026 — Plateforme éducative</footer>
+
+<script>
+const categories={
+"Fondamentaux":[
+["📐","Mathématiques","Nombres, calcul, algèbre, géométrie, statistiques et problèmes."],
+["🇫🇷","Français","Grammaire, conjugaison, vocabulaire, littérature, expression écrite et orale."],
+["🇬🇧","English","Grammar, vocabulary, reading, writing, speaking and listening."],
+["🌍","Histoire-Géographie","Histoire, géographie, citoyenneté, cartes et cultures."],
+["🗣️","Communication","Expression orale, communication professionnelle et prise de parole."]
+],
+"Sciences":[
+["⚛️","Physique-Chimie","Mécanique, électricité, énergie, matière, réactions et chimie."],
+["🧬","Sciences de la vie et de la Terre","Biologie, environnement, corps humain, géologie et écologie."],
+["🔬","Sciences","Méthodes scientifiques, expériences et culture scientifique."],
+["💻","Informatique","Algorithmique, programmation, bureautique, réseaux et culture numérique."],
+["🌱","Agriculture & environnement","Agriculture, élevage, environnement, développement durable et ressources."]
+],
+"Technologie & technique":[
+["⚙️","Technologie","Conception, systèmes techniques, matériaux et fonctionnement des objets."],
+["⚡","Électricité","Circuits, installations, machines électriques, mesures et sécurité."],
+["🔌","Électronique","Composants, circuits électroniques, systèmes et instrumentation."],
+["🔧","Mécanique","Mécanique générale, machines, fabrication et maintenance."],
+["🤖","Automatisme","Automates, capteurs, actionneurs, commande et systèmes automatisés."],
+["🛠️","Maintenance industrielle","Diagnostic, entretien, réparation et prévention des pannes."],
+["🏗️","Génie civil / BTP","Construction, matériaux, structures, plans, métrés et chantier."],
+["📏","Dessin technique","Lecture de plans, projections, cotation et représentation technique."],
+["📍","Topographie","Mesures, plans, terrains, nivellement et implantation."],
+["🚗","Automobile","Moteur, transmission, électricité automobile, diagnostic et entretien."]
+],
+"Économie, gestion & entrepreneuriat":[
+["💼","Entrepreneuriat","Idée de projet, étude de marché, business plan, gestion et innovation."],
+["📊","Économie","Marchés, production, consommation, monnaie et développement."],
+["🧾","Comptabilité","Comptes, opérations, bilan, résultats et documents comptables."],
+["🏢","Gestion","Organisation, gestion des ressources, administration et management."],
+["📣","Marketing","Produit, prix, communication, vente, client et stratégie."],
+["🛒","Commerce","Techniques de vente, relation client, distribution et négociation."],
+["💰","Finance","Budget, épargne, investissement et notions financières."]
+],
+"Langues, culture & société":[
+["🗺️","Culture générale","Actualité, monde, institutions, culture et connaissances générales."],
+["🇪🇸","Español","Vocabulaire, grammaire, compréhension et expression."],
+["🧠","Philosophie","Réflexion, argumentation, concepts et dissertation."],
+["🎨","Arts","Arts plastiques, histoire de l'art et créativité."],
+["🏃","Éducation physique et sportive","Sport, santé, règles, entraînement et activités physiques."]
+]};
+
+function renderCatalog(filter=""){
+const root=document.getElementById("catalog");root.innerHTML="";
+Object.entries(categories).forEach(([cat,items])=>{
+const matches=items.filter(x=>(x[1]+" "+x[2]).toLowerCase().includes(filter.toLowerCase()));
+if(!matches.length)return;
+const title=document.createElement("h3");title.className="category";title.textContent=cat;root.appendChild(title);
+const grid=document.createElement("div");grid.className="grid";
+matches.forEach(x=>{const card=document.createElement("div");card.className="card subject";card.innerHTML=`<div class="icon">${x[0]}</div><h3>${x[1]}</h3><p>${x[2]}</p><button class="btn primary" onclick="startCourse('${x[1].replace(/'/g,"\\'")}')">Voir le cours</button>`;grid.appendChild(card)});
+root.appendChild(grid);
+});
+}
+function searchCourses(){renderCatalog(document.getElementById("search").value)}
+const courseData={
+"Mathématiques":{icon:"📐",intro:"Les notions essentielles de mathématiques.",lessons:["Nombres et calcul","Fractions et pourcentages","Algèbre","Géométrie","Statistiques"],exercise:"Calcule : 25 × 4 = ?"},
+"Français":{icon:"🇫🇷",intro:"Améliore ta maîtrise de la langue française.",lessons:["Grammaire","Conjugaison","Orthographe","Vocabulaire","Expression écrite"],exercise:"Donne le verbe dans : « Les élèves travaillent. »"},
+"English":{icon:"🇬🇧",intro:"Build your English skills step by step.",lessons:["Grammar","Vocabulary","Reading","Writing","Speaking"],exercise:"Translate: « Bonjour » into English."},
+"Histoire-Géographie":{icon:"🌍",intro:"Comprends les grands événements et les territoires.",lessons:["Histoire","Géographie","Cartographie","Citoyenneté","Culture générale"],exercise:"Quelle est la capitale du Cameroun ?"},
+"Physique-Chimie":{icon:"⚛️",intro:"Découvre les phénomènes physiques et chimiques.",lessons:["Matière","Énergie","Mécanique","Électricité","Réactions chimiques"],exercise:"Quelle unité mesure une tension électrique ?"},
+"Sciences de la vie et de la Terre":{icon:"🧬",intro:"Explore le vivant, la Terre et l'environnement.",lessons:["Cellule","Corps humain","Génétique","Écosystèmes","Géologie"],exercise:"Quel organe pompe le sang ?"},
+"Informatique":{icon:"💻",intro:"Apprends les bases du numérique et de la programmation.",lessons:["Ordinateur","Internet","Algorithmique","Programmation","Cybersécurité"],exercise:"Que signifie HTML ?"},
+"Technologie":{icon:"⚙️",intro:"Comprends les systèmes et objets techniques.",lessons:["Systèmes techniques","Matériaux","Conception","Énergie","Innovation"],exercise:"À quoi sert un schéma technique ?"},
+"Électricité":{icon:"⚡",intro:"Étudie les circuits et installations électriques.",lessons:["Courant","Tension","Résistance","Circuits","Sécurité"],exercise:"Quelle grandeur se mesure en volts ?"},
+"Électronique":{icon:"🔌",intro:"Découvre les composants et circuits électroniques.",lessons:["Diodes","Transistors","Résistances","Condensateurs","Circuits"],exercise:"Quel composant limite généralement le courant ?"},
+"Mécanique":{icon:"🔧",intro:"Comprends les machines, forces et mécanismes.",lessons:["Forces","Mouvements","Machines","Transmission","Fabrication"],exercise:"Quel instrument mesure une longueur ?"},
+"Automatisme":{icon:"🤖",intro:"Découvre les systèmes automatisés.",lessons:["Capteurs","Actionneurs","Automates","Commande","Régulation"],exercise:"Quel élément détecte généralement une information physique ?"},
+"Maintenance industrielle":{icon:"🛠️",intro:"Apprends à prévenir et diagnostiquer les pannes.",lessons:["Prévention","Diagnostic","Entretien","Dépannage","Sécurité"],exercise:"Pourquoi faire une maintenance préventive ?"},
+"Génie civil / BTP":{icon:"🏗️",intro:"Découvre les bases de la construction.",lessons:["Matériaux","Fondations","Structures","Plans","Sécurité chantier"],exercise:"Quel document représente graphiquement un bâtiment ?"},
+"Dessin technique":{icon:"📏",intro:"Apprends à lire et produire des plans techniques.",lessons:["Projections","Cotation","Échelles","Vues","Plans"],exercise:"À quoi sert une échelle sur un plan ?"},
+"Topographie":{icon:"📍",intro:"Découvre les mesures et représentations du terrain.",lessons:["Mesures","Nivellement","Plans","Angles","Implantation"],exercise:"À quoi sert un plan topographique ?"},
+"Automobile":{icon:"🚗",intro:"Comprends les principaux systèmes d'un véhicule.",lessons:["Moteur","Transmission","Freinage","Électricité","Diagnostic"],exercise:"Quel système permet de ralentir un véhicule ?"},
+"Entrepreneuriat":{icon:"💼",intro:"Transforme une idée en projet.",lessons:["Idée","Étude de marché","Business plan","Financement","Gestion"],exercise:"Pourquoi réaliser une étude de marché ?"},
+"Économie":{icon:"📊",intro:"Comprends les mécanismes économiques.",lessons:["Marché","Production","Consommation","Monnaie","Développement"],exercise:"Qu'est-ce qu'un marché ?"},
+"Comptabilité":{icon:"🧾",intro:"Découvre les bases de la comptabilité.",lessons:["Comptes","Débit et crédit","Bilan","Résultat","Documents comptables"],exercise:"À quoi sert un bilan comptable ?"},
+"Gestion":{icon:"🏢",intro:"Apprends à organiser et gérer une activité.",lessons:["Organisation","Ressources","Budget","Management","Décision"],exercise:"Pourquoi établir un budget ?"},
+"Marketing":{icon:"📣",intro:"Découvre comment comprendre et servir les clients.",lessons:["Client","Produit","Prix","Communication","Stratégie"],exercise:"Quel est l'objectif principal du marketing ?"},
+"Commerce":{icon:"🛒",intro:"Développe tes compétences commerciales.",lessons:["Vente","Accueil","Négociation","Distribution","Relation client"],exercise:"Quelle compétence est importante pour un vendeur ?"},
+"Finance":{icon:"💰",intro:"Comprends les notions financières du quotidien.",lessons:["Budget","Épargne","Crédit","Investissement","Risques"],exercise:"Pourquoi faire un budget personnel ?"},
+"Culture générale":{icon:"🗺️",intro:"Développe tes connaissances sur le monde.",lessons:["Institutions","Actualité","Sciences","Culture","Citoyenneté"],exercise:"Cite un pays d'Afrique centrale."},
+"Communication":{icon:"🗣️",intro:"Améliore ton expression et ta communication.",lessons:["Oral","Écrit","Écoute","Présentation","Communication professionnelle"],exercise:"Pourquoi faut-il écouter avant de répondre ?"},
+"Español":{icon:"🇪🇸",intro:"Aprende las bases del español.",lessons:["Vocabulario","Gramática","Lectura","Escritura","Conversación"],exercise:"Comment dit-on « bonjour » en espagnol ?"},
+"Philosophie":{icon:"🧠",intro:"Développe ton raisonnement et ton argumentation.",lessons:["Concepts","Argumentation","Dissertation","Vérité","Liberté"],exercise:"Qu'est-ce qu'un argument ?"},
+"Arts":{icon:"🎨",intro:"Développe ta créativité et ta culture artistique.",lessons:["Dessin","Couleur","Création","Histoire de l'art","Expression"],exercise:"Cite une forme d'expression artistique."},
+"Éducation physique et sportive":{icon:"🏃",intro:"Découvre les principes du sport et de l'activité physique.",lessons:["Endurance","Force","Jeux","Règles","Santé"],exercise:"Pourquoi l'échauffement est-il important ?"},
+"Agriculture & environnement":{icon:"🌱",intro:"Apprends les bases de l'agriculture et de la protection de l'environnement.",lessons:["Sol","Cultures","Élevage","Ressources","Développement durable"],exercise:"Pourquoi protéger les sols ?"}
+};
+
+function startCourse(name){
+const c=courseData[name]||{icon:"📚",intro:"Cours de "+name,lessons:["Introduction","Notions essentielles","Applications","Exercices"],exercise:"Révise les notions principales de ce cours."};
+document.getElementById("courseTitle").textContent=c.icon+" "+name;
+document.getElementById("courseIntro").textContent=c.intro;
+document.getElementById("lessonList").innerHTML=c.lessons.map((l,i)=>`<button class="lesson" onclick="openLesson('${l.replace(/'/g,"\\'")}','${name.replace(/'/g,"\\'")}')">📖 ${i+1}. ${l}</button>`).join("");
+document.getElementById("courseExercise").textContent=c.exercise;
+document.getElementById("courseModal").classList.add("show");
+document.body.style.overflow="hidden";
+}
+function closeCourse(){document.getElementById("courseModal").classList.remove("show");document.body.style.overflow=""}
+const detailedLessons={"Mathématiques": {"Algèbre": ["Les expressions algébriques", "Une expression algébrique utilise des nombres, des lettres et des opérations. Exemple : 3x + 2. Si x = 4, alors 3x + 2 = 14.", "Calcule 5x + 3 pour x = 2.", "13"], "Fractions et pourcentages": ["Fractions et pourcentages", "Une fraction représente une partie d'un tout. Un pourcentage est une fraction sur 100. Exemple : 25 % = 25/100 = 1/4.", "Combien vaut 50 % de 80 ?", "40"], "Géométrie": ["Bases de la géométrie", "Un triangle possède trois côtés. Le périmètre est la somme des longueurs de ses côtés. Pour un rectangle, P = 2(L + l).", "Quel est le périmètre d'un rectangle de longueur 8 cm et largeur 3 cm ?", "22 cm"], "Nombres et calcul": ["Nombres et opérations", "Les quatre opérations fondamentales sont l'addition, la soustraction, la multiplication et la division. Il faut respecter les priorités de calcul.", "Calcule 18 + 7 × 2.", "32"], "Statistiques": ["Introduction aux statistiques", "La moyenne d'une série s'obtient en additionnant les valeurs puis en divisant par leur nombre.", "Quelle est la moyenne de 4, 6 et 8 ?", "6"]}, "Français": {"Grammaire": ["Les classes de mots", "Les mots peuvent avoir différentes fonctions et classes : nom, verbe, adjectif, déterminant, pronom, adverbe, etc.", "Dans « Le petit garçon court », quel est le verbe ?", "court"], "Conjugaison": ["Le présent de l'indicatif", "Le présent peut exprimer une action actuelle ou une habitude. Exemple : je travaille, tu travailles, il travaille.", "Conjugue « travailler » avec « nous » au présent.", "nous travaillons"], "Orthographe": ["Bien écrire", "L'orthographe permet d'écrire les mots correctement. La relecture aide à repérer les erreurs d'accord et de conjugaison.", "Quelle forme est correcte : « les enfant » ou « les enfants » ?", "les enfants"], "Vocabulaire": ["Le vocabulaire", "Les synonymes sont des mots de sens proche. Les antonymes ont des sens opposés.", "Donne un synonyme de « rapide ».", "vite"], "Expression écrite": ["Construire un paragraphe", "Un bon paragraphe contient une idée principale, des explications et éventuellement un exemple. Les phrases doivent être reliées logiquement.", "Écris trois phrases sur ton école."]}, "English": {"Grammar": ["Basic English grammar", "A simple English sentence often follows Subject + Verb + Complement. Example: I read a book.", "Translate: « Je suis un élève. »", "I am a student."], "Vocabulary": ["Everyday vocabulary", "Learning common words helps you communicate. Example: school, book, teacher, friend.", "Translate « livre » into English.", "book"], "Reading": ["Reading skills", "Look for the main idea, important details and unfamiliar words when reading a text.", "What should you identify first when reading a short text?", "the main idea"], "Writing": ["Writing a sentence", "Start a sentence with a capital letter and finish it with punctuation.", "Write one English sentence about school."], "Speaking": ["Speaking practice", "Use short, clear sentences and practice pronunciation regularly.", "How do you greet someone politely in English?", "Hello"]}, "Informatique": {"Ordinateur": ["Les composants d'un ordinateur", "Un ordinateur comprend notamment un processeur, de la mémoire, du stockage et des périphériques.", "Quel composant exécute principalement les instructions ?", "le processeur"], "Internet": ["Comprendre Internet", "Internet est un réseau mondial permettant à des appareils de communiquer et d'échanger des informations.", "Internet est-il un seul ordinateur ?", "non"], "Algorithmique": ["Les algorithmes", "Un algorithme est une suite d'instructions organisées pour résoudre un problème ou effectuer une tâche.", "À quoi sert un algorithme ?", "à résoudre un problème"], "Programmation": ["Découvrir la programmation", "Programmer consiste à donner des instructions à un ordinateur dans un langage compréhensible par celui-ci.", "Qu'est-ce qu'une instruction ?", "une commande donnée à l'ordinateur"], "Cybersécurité": ["Les bases de la cybersécurité", "Utilise des mots de passe solides, évite de partager tes codes secrets et vérifie les liens avant de les ouvrir.", "Faut-il partager son mot de passe ?", "non"]}, "Entrepreneuriat": {"Idée": ["Trouver une idée de projet", "Une bonne idée répond à un besoin réel. Observe les problèmes autour de toi et imagine une solution utile.", "Une idée d'entreprise doit-elle répondre à un besoin ?", "oui"], "Étude de marché": ["L'étude de marché", "Elle permet de connaître les clients, leurs besoins, les concurrents et les possibilités du marché.", "Pourquoi faire une étude de marché ?", "pour connaître le marché"], "Business plan": ["Le business plan", "Le business plan présente le projet, le marché, la stratégie, les ressources et les prévisions financières.", "À quoi sert un business plan ?", "à présenter et planifier le projet"], "Financement": ["Financer un projet", "Un projet peut avoir besoin d'épargne, de financement extérieur ou de revenus générés par l'activité.", "Cite une source possible de financement.", "l'épargne"], "Gestion": ["Gérer une petite activité", "Il faut suivre les recettes, les dépenses, les stocks et les objectifs pour piloter une activité.", "Pourquoi suivre les dépenses ?", "pour contrôler le budget"]}, "Électricité": {"Courant": ["Le courant électrique", "Le courant correspond au déplacement de charges électriques dans un circuit. Son intensité se mesure en ampères.", "Quelle unité mesure l'intensité du courant ?", "ampère"], "Tension": ["La tension électrique", "La tension électrique se mesure en volts (V). Un voltmètre permet de la mesurer.", "Quelle unité mesure la tension ?", "volt"], "Résistance": ["La résistance", "La résistance s'oppose au passage du courant. Elle se mesure en ohms (Ω).", "Quelle unité mesure une résistance ?", "ohm"], "Circuits": ["Les circuits électriques", "Un circuit doit être fermé pour permettre la circulation du courant. Il comprend généralement une source, des conducteurs et un récepteur.", "Un circuit doit-il être fermé pour fonctionner ?", "oui"], "Sécurité": ["Sécurité électrique", "Avant toute intervention sur une installation électrique, il faut couper l'alimentation et respecter les règles de sécurité.", "Que faut-il faire avant une intervention électrique ?", "couper l'alimentation"]}};
+
+const fullCatalog={"Mathématiques": ["Nombres et calcul", "Fractions et pourcentages", "Algèbre", "Équations", "Géométrie", "Périmètres et aires", "Volumes", "Proportionnalité", "Fonctions", "Statistiques", "Probabilités", "Trigonométrie"], "Français": ["Grammaire", "Conjugaison", "Orthographe", "Vocabulaire", "Expression écrite", "Compréhension de texte", "Littérature", "Poésie", "Argumentation", "Communication orale"], "English": ["Grammar", "Vocabulary", "Reading", "Writing", "Speaking", "Listening", "Everyday English", "Tenses", "Questions and answers", "English for school"], "Histoire-Géographie": ["Antiquité", "Moyen Âge", "Époque moderne", "Époque contemporaine", "Histoire de l'Afrique", "Histoire du Cameroun", "Géographie physique", "Géographie humaine", "Population", "Cartographie", "Citoyenneté"], "Physique-Chimie": ["Matière", "Mesures et unités", "Mouvement", "Forces", "Travail et énergie", "Pression", "Chaleur", "Électricité", "Optique", "Atomes et molécules", "Réactions chimiques", "Acides et bases"], "Sciences de la vie et de la Terre": ["Cellule", "Organisation du vivant", "Nutrition", "Respiration", "Circulation", "Reproduction", "Génétique", "Micro-organismes", "Écosystèmes", "Environnement", "Géologie", "Santé"], "Informatique": ["Ordinateur", "Systèmes d'exploitation", "Fichiers et dossiers", "Internet", "Réseaux", "Algorithmique", "Programmation", "Bases de données", "Bureautique", "Cybersécurité", "Intelligence artificielle", "Culture numérique"], "Technologie": ["Objets techniques", "Systèmes techniques", "Matériaux", "Énergie", "Transmission du mouvement", "Conception", "Fabrication", "Maintenance", "Innovation", "Sécurité"], "Électricité": ["Grandeurs électriques", "Courant", "Tension", "Résistance", "Loi d'Ohm", "Circuits série et parallèle", "Puissance électrique", "Énergie électrique", "Machines électriques", "Installations", "Protection", "Sécurité"], "Électronique": ["Composants", "Résistances", "Condensateurs", "Diodes", "Transistors", "Alimentation", "Amplification", "Logique numérique", "Capteurs", "Instrumentation", "Dépannage"], "Mécanique": ["Unités et mesures", "Forces", "Mouvements", "Équilibre", "Machines simples", "Transmission", "Engrenages", "Roulements", "Matériaux", "Usinage", "Maintenance"], "Automatisme": ["Systèmes automatisés", "Capteurs", "Actionneurs", "Logique", "Automates programmables", "Commande", "Régulation", "Pneumatique", "Hydraulique", "Sécurité"], "Maintenance industrielle": ["Maintenance préventive", "Maintenance corrective", "Diagnostic", "Pannes", "Outils", "Lubrification", "Mécanique", "Électricité", "Organisation", "Sécurité"], "Génie civil / BTP": ["Matériaux de construction", "Fondations", "Béton", "Maçonnerie", "Structures", "Charpente", "Routes", "Topographie appliquée", "Lecture de plans", "Métrés", "Devis", "Sécurité chantier"], "Dessin technique": ["Instruments de dessin", "Types de traits", "Échelles", "Cotation", "Projections", "Vues", "Coupes", "Sections", "Perspectives", "Lecture de plans", "Dessin assisté par ordinateur"], "Topographie": ["Mesures", "Angles", "Distances", "Nivellement", "Coordonnées", "Levé topographique", "Plans", "Implantation", "Instruments", "Calculs topographiques"], "Automobile": ["Moteur", "Admission et échappement", "Refroidissement", "Lubrification", "Transmission", "Embrayage", "Freinage", "Direction", "Suspension", "Électricité automobile", "Diagnostic", "Entretien"], "Entrepreneuriat": ["Idée de projet", "Besoin et opportunité", "Étude de marché", "Clientèle", "Concurrence", "Business model", "Business plan", "Financement", "Budget", "Marketing", "Gestion", "Innovation", "Éthique"], "Économie": ["Besoins et ressources", "Production", "Consommation", "Marché", "Prix", "Monnaie", "Banque", "Entreprise", "État", "Commerce international", "Développement", "Mondialisation"], "Comptabilité": ["Notions de base", "Comptes", "Débit et crédit", "Journal", "Grand livre", "Balance", "Bilan", "Compte de résultat", "Trésorerie", "Stocks", "Amortissement", "Analyse"], "Gestion": ["Organisation", "Ressources humaines", "Budget", "Achats", "Stocks", "Ventes", "Gestion financière", "Management", "Planification", "Contrôle", "Prise de décision"], "Marketing": ["Besoin du client", "Étude de marché", "Produit", "Prix", "Distribution", "Communication", "Publicité", "Marque", "Digital marketing", "Fidélisation", "Stratégie"], "Commerce": ["Accueil client", "Prospection", "Argumentaire", "Vente", "Négociation", "Prix", "Commande", "Facturation", "Distribution", "Service après-vente", "Relation client"], "Finance": ["Budget personnel", "Épargne", "Banque", "Crédit", "Intérêt", "Investissement", "Risque", "Assurance", "Gestion financière", "Finance d'entreprise"], "Culture générale": ["Afrique", "Cameroun", "Institutions", "Sciences", "Technologie", "Culture", "Arts", "Sport", "Environnement", "Actualité", "Citoyenneté"], "Communication": ["Communication orale", "Communication écrite", "Écoute", "Présentation", "Entretien", "Lettre", "Email", "Travail en équipe", "Communication professionnelle", "Gestion des conflits"], "Español": ["Saludos", "Vocabulario", "Gramática", "Verbos", "Tiempos", "Lectura", "Escritura", "Conversación", "Comprensión", "Cultura hispánica"], "Philosophie": ["Introduction", "Concept et définition", "Argumentation", "Vérité", "Liberté", "Justice", "Conscience", "Bonheur", "Morale", "Dissertation"], "Arts": ["Dessin", "Couleur", "Formes", "Composition", "Peinture", "Sculpture", "Musique", "Arts africains", "Histoire de l'art", "Créativité"], "Éducation physique et sportive": ["Échauffement", "Endurance", "Vitesse", "Force", "Coordination", "Football", "Basketball", "Athlétisme", "Gymnastique", "Santé", "Règles et fair-play"], "Agriculture & environnement": ["Sol", "Semences", "Cultures", "Fertilisation", "Irrigation", "Protection des cultures", "Élevage", "Alimentation animale", "Environnement", "Eau", "Développement durable", "Gestion des déchets"]};
+function getGeneratedLesson(course,lesson,index){
+const intros={
+"Mathématiques":"Cette leçon développe une notion de mathématiques avec définitions, méthode et applications.",
+"Français":"Cette leçon développe une compétence de langue française avec règles et exemples.",
+"English":"This lesson develops an English language skill through vocabulary, grammar and practice.",
+"Histoire-Géographie":"Cette leçon permet de comprendre des faits historiques, des territoires et leur organisation.",
+"Physique-Chimie":"Cette leçon présente une notion scientifique, ses grandeurs, ses lois et ses applications.",
+"Informatique":"Cette leçon présente une notion numérique avec une méthode pratique et des exemples.",
+"Technologie":"Cette leçon explique le fonctionnement, la conception ou l'utilisation d'un système technique.",
+"Électricité":"Cette leçon présente une notion électrique, ses unités, ses relations et les règles de sécurité.",
+"Électronique":"Cette leçon présente un composant ou un système électronique et son rôle.",
+"Entrepreneuriat":"Cette leçon développe une compétence utile pour créer, organiser et gérer un projet.",
+"Économie":"Cette leçon présente un mécanisme économique et son rôle dans la vie quotidienne.",
+"Comptabilité":"Cette leçon présente une notion comptable et son application dans une activité.",
+"Gestion":"Cette leçon explique une méthode pour organiser efficacement une activité.",
+"Marketing":"Cette leçon présente une notion de marketing orientée vers les besoins du client.",
+"Commerce":"Cette leçon développe une compétence commerciale et relationnelle.",
+"Finance":"Cette leçon présente une notion financière et ses applications pratiques."
+};
+let intro=intros[course]||"Cette leçon présente les notions essentielles du chapitre et leurs applications.";
+let examples="Commence par définir les termes importants, observe un exemple, puis applique la méthode à un nouvel exercice.";
+let exercise="Explique avec tes propres mots la notion « "+lesson+" » et donne un exemple.";
+return {title:lesson,intro:intro,body:examples,exercise:exercise,answer:"Réponse attendue : une explication claire de la notion, accompagnée d'un exemple pertinent."};
+}
+function populateAllLessons(){
+Object.keys(fullCatalog).forEach(course=>{
+if(!courseData[course]) courseData[course]={icon:"📚",intro:"Cours de "+course,lessons:fullCatalog[course],exercise:"Révise le chapitre choisi."};
+else {
+courseData[course].lessons=fullCatalog[course];
+}
+});
+}
+populateAllLessons();
+
+const tmjLessonTemplates = {
+  "Mathématiques": {
+    fr: {
+      explain: (chapter, level) => `En ${chapter}, on cherche à comprendre une règle mathématique, à savoir quand l'utiliser et à vérifier le résultat. Au niveau ${level}, avance toujours en trois étapes : identifier les données, choisir la méthode, puis vérifier le résultat.`,
+      examples: (chapter) => [`Exemple guidé : on commence par identifier les nombres ou les informations utiles du problème.`, `Deuxième étape : on applique la règle de ${chapter} sans sauter les calculs.`, `Dernière étape : on vérifie si le résultat est cohérent avec la question.`],
+      exercise: (chapter, level) => `Exercice ${level} — ${chapter} : invente un exemple simple lié à ce chapitre, résous-le étape par étape et vérifie ton résultat.`,
+      answer: `Une bonne correction doit présenter les données, la méthode, les calculs et une vérification finale.`
+    }
+  },
+  "Français": {
+    fr: {
+      explain: (chapter, level) => `Cette leçon de ${chapter} développe la maîtrise du français. Au niveau ${level}, observe la règle, repère-la dans une phrase, puis réutilise-la dans ta propre production.`,
+      examples: (chapter) => [`Exemple : repère d'abord le mot ou la construction étudiée dans une phrase.`, `Explique ensuite sa fonction ou sa règle.`, `Enfin, écris une nouvelle phrase correcte en utilisant ${chapter}.`],
+      exercise: (chapter, level) => `Exercice ${level} — ${chapter} : écris trois phrases qui utilisent correctement la notion étudiée et explique brièvement la règle.`,
+      answer: `La correction doit montrer que la notion est correctement identifiée et utilisée, avec des phrases complètes et correctement construites.`
+    }
+  },
+  "English": {
+    fr: {
+      explain: (chapter, level) => `Cette leçon d'anglais travaille « ${chapter} ». Au niveau ${level}, l'objectif est de comprendre la règle ou le vocabulaire, puis de l'utiliser dans une situation de communication.`,
+      examples: (chapter) => [`Example 1: read the sentence and identify the language point studied.`, `Example 2: replace one word or expression while keeping the sentence correct.`, `Example 3: create your own short sentence using ${chapter}.`],
+      exercise: (chapter, level) => `Exercise ${level} — ${chapter}: write three short English sentences using the lesson point. Then read them aloud.`,
+      answer: `A good answer uses the target vocabulary or grammar correctly and forms complete, understandable sentences.`
+    }
+  },
+  "Physique-Chimie": {
+    fr: {
+      explain: (chapter, level) => `En physique-chimie, ${chapter} se comprend en reliant une observation à une grandeur, une loi ou un modèle. Au niveau ${level}, note les unités et les conditions avant tout calcul.`,
+      examples: (chapter) => [`Observation : décris le phénomène lié à ${chapter}.`, `Modèle : identifie la grandeur ou la règle scientifique qui permet de l'expliquer.`, `Application : utilise cette règle dans une situation simple.`],
+      exercise: (chapter, level) => `Exercice ${level} — ${chapter} : décris un phénomène concret lié au chapitre, indique les grandeurs importantes et explique la relation entre elles.`,
+      answer: `La correction doit identifier correctement le phénomène, les grandeurs ou espèces concernées, les unités lorsque nécessaire et la relation scientifique utilisée.`
+    }
+  },
+  "Sciences de la vie et de la Terre": {
+    fr: {
+      explain: (chapter, level) => `Cette leçon étudie ${chapter} dans le vivant et l'environnement. Au niveau ${level}, on relie les observations, les organes ou structures concernés et leur fonction.`,
+      examples: (chapter) => [`Observation : décris ce que l'on peut voir ou mesurer concernant ${chapter}.`, `Explication : relie cette observation à une structure, une fonction ou un mécanisme.`, `Application : donne un exemple dans la vie réelle ou dans un écosystème.`],
+      exercise: (chapter, level) => `Exercice ${level} — ${chapter} : explique le phénomène étudié, indique les éléments importants et donne un exemple concret.`,
+      answer: `La correction doit relier correctement les éléments du phénomène et expliquer leur rôle ou leur relation.`
+    }
+  },
+  "Informatique": {
+    fr: {
+      explain: (chapter, level) => `Cette leçon présente ${chapter}. Au niveau ${level}, apprends le principe, identifie les éléments essentiels et applique-les dans une petite situation pratique.`,
+      examples: (chapter) => [`Exemple 1 : identifie le problème que ${chapter} permet de résoudre.`, `Exemple 2 : décris les étapes principales d'une solution.`, `Exemple 3 : imagine une utilisation de ${chapter} dans une école ou une entreprise.`],
+      exercise: (chapter, level) => `Exercice ${level} — ${chapter} : explique à quoi sert cette notion et décris une petite procédure permettant de l'utiliser correctement.`,
+      answer: `La correction doit présenter le but de la notion, les étapes essentielles et un exemple d'utilisation cohérent.`
+    }
+  },
+  "Entrepreneuriat": {
+    fr: {
+      explain: (chapter, level) => `Cette leçon développe la compétence entrepreneuriale « ${chapter} ». Au niveau ${level}, cherche toujours à relier la notion à un besoin réel, à un client et à une solution réalisable.`,
+      examples: (chapter) => [`Exemple : imagine un petit service utile aux élèves et applique la notion ${chapter}.`, `Identifie le besoin auquel le projet répond.`, `Explique comment tu mesurerais si le projet fonctionne.`],
+      exercise: (chapter, level) => `Exercice ${level} — ${chapter} : propose une petite idée de projet et montre comment la notion étudiée t'aide à la construire.`,
+      answer: `Une bonne correction présente un besoin réel, une solution claire, le public concerné et une manière réaliste de vérifier le projet.`
+    }
+  },
+  "Électricité": {
+    fr: {
+      explain: (chapter, level) => `Cette leçon présente ${chapter} en électricité. Au niveau ${level}, distingue les grandeurs, leurs unités, les composants du circuit et les règles de sécurité.`,
+      examples: (chapter) => [`Exemple : identifie la grandeur ou le composant directement associé à ${chapter}.`, `Indique son unité ou son rôle lorsqu'il y en a un.`, `Explique comment cette notion intervient dans un circuit réel.`],
+      exercise: (chapter, level) => `Exercice ${level} — ${chapter} : décris la notion, donne son unité ou son rôle et explique un exemple simple de circuit.`,
+      answer: `La correction doit donner la définition correcte, l'unité ou le rôle approprié et un exemple de circuit cohérent.`
+    }
+  }
+};
+
+function tmjEsc(s){
+  return String(s ?? "").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+}
+
+function tmjGetLevel(){
+  const key = localStorage.getItem("tmjStudyLevel") || "all";
+  const lang = (typeof tmjLanguage !== "undefined") ? tmjLanguage : "fr";
+  const names = {
+    fr:{primary:"Primaire",middle:"Collège",high:"Lycée",university:"Université",all:"Niveau général"},
+    en:{primary:"Primary School",middle:"Middle School",high:"High School",university:"University",all:"General level"}
+  };
+  return {key, name:names[lang][key] || names[lang].all, lang};
+}
+
+function tmjBuildLesson(course, lesson){
+  const {key:levelKey,name:levelName,lang} = tmjGetLevel();
+  const level = levelName;
+  const custom = detailedLessons[course] && detailedLessons[course][lesson];
+
+  if(custom){
+    const [title, explanation, exercise, answer] = custom;
+    return {
+      title,
+      objective: lang==="en" ? `Understand the key idea of ${lesson} and know how to use it at ${level} level.` : `Comprendre l'idée essentielle de ${lesson} et savoir l'utiliser au niveau ${level}.`,
+      explanation,
+      examples: [
+        lang==="en" ? `Worked example: identify the important information before applying the rule.` : `Exemple guidé : commence par identifier les informations importantes avant d'appliquer la règle.`,
+        lang==="en" ? `Second example: explain the same idea in your own words.` : `Deuxième exemple : explique la même idée avec tes propres mots.`,
+        lang==="en" ? `Application: create a similar example and check your result.` : `Application : crée un exemple similaire et vérifie ton résultat.`
+      ],
+      exercise,
+      answer: answer || (lang==="en" ? "A complete answer should clearly explain the method and show the reasoning." : "Une réponse complète doit expliquer clairement la méthode et montrer le raisonnement."),
+      quizTopic: lesson,
+      levelKey
+    };
+  }
+
+  const template = tmjLessonTemplates[course]?.fr;
+  const generic = template || {
+    explain:(ch,l)=> lang==="en" ? `This lesson introduces ${ch}. At ${l} level, learn the key ideas, identify the important terms and apply them to a concrete situation.` : `Cette leçon présente ${ch}. Au niveau ${l}, apprends les idées essentielles, les termes importants et applique-les à une situation concrète.`,
+    examples:(ch)=> lang==="en" ? [`Example: identify the main idea of ${ch}.`,`Example: connect the idea to a real situation.`,`Example: explain the result in your own words.`] : [`Exemple : identifie l'idée principale de ${ch}.`,`Exemple : relie la notion à une situation réelle.`,`Exemple : explique le résultat avec tes propres mots.`],
+    exercise:(ch,l)=> lang==="en" ? `Exercise ${l} — ${ch}: explain the idea, give one example and describe how it can be used.` : `Exercice ${l} — ${ch} : explique la notion, donne un exemple et décris son utilisation.`,
+    answer: lang==="en" ? "A complete answer identifies the concept, explains it accurately and gives a relevant example." : "Une réponse complète identifie la notion, l'explique correctement et donne un exemple pertinent."
+  };
+
+  return {
+    title: lesson,
+    objective: lang==="en" ? `Learning objective: understand ${lesson}, recognize it in an example and apply it at ${level} level.` : `Objectif : comprendre ${lesson}, le reconnaître dans un exemple et l'appliquer au niveau ${level}.`,
+    explanation: generic.explain(lesson, level),
+    examples: generic.examples(lesson),
+    exercise: generic.exercise(lesson, level),
+    answer: generic.answer,
+    quizTopic: lesson,
+    levelKey
+  };
+}
+
+function tmjBuildQuiz(course, lesson){
+  const {lang,name} = tmjGetLevel();
+  const q = [
+    {
+      q: lang==="en" ? `What should you do first when studying "${lesson}"?` : `Que faut-il faire en premier pour étudier « ${lesson} » ?`,
+      options: lang==="en" ? ["Identify the important information","Skip the explanation","Guess the result","Ignore the example"] : ["Identifier les informations importantes","Ignorer l'explication","Deviner le résultat","Ignorer l'exemple"],
+      correct:0
+    },
+    {
+      q: lang==="en" ? `Which approach is most useful at ${name} level?` : `Quelle démarche est la plus utile au niveau ${name} ?`,
+      options: lang==="en" ? ["Understand, practise and check","Memorize without understanding","Skip exercises","Copy an answer without checking"] : ["Comprendre, pratiquer et vérifier","Mémoriser sans comprendre","Sauter les exercices","Copier une réponse sans vérifier"],
+      correct:0
+    },
+    {
+      q: lang==="en" ? `After an exercise, what is a good habit?` : `Après un exercice, quelle est une bonne habitude ?`,
+      options: lang==="en" ? ["Check the reasoning and result","Never review the work","Erase the calculation","Avoid explaining the method"] : ["Vérifier le raisonnement et le résultat","Ne jamais relire le travail","Effacer le calcul","Éviter d'expliquer la méthode"],
+      correct:0
+    }
+  ];
+
+  return q;
+}
+
+function tmjRenderLessonQuiz(course,lesson){
+  const {lang} = tmjGetLevel();
+  const quiz = tmjBuildQuiz(course,lesson);
+  const box = document.getElementById("lessonQuiz");
+  if(!box) return;
+
+  box.innerHTML = `
+    <h3>🧠 ${lang==="en" ? "Quick quiz" : "Petit quiz"}</h3>
+    <p>${lang==="en" ? "Answer the three questions, then check your score." : "Réponds aux trois questions, puis vérifie ton score."}</p>
+    <form id="tmjLessonQuizForm">
+      ${quiz.map((item,i)=>`
+        <div class="tmj-question">
+          <strong>${i+1}. ${tmjEsc(item.q)}</strong>
+          ${item.options.map((op,j)=>`
+            <label><input type="radio" name="q${i}" value="${j}"> ${tmjEsc(op)}</label>
+          `).join("")}
+        </div>
+      `).join("")}
+      <button type="submit" class="btn primary">${lang==="en" ? "Check my score" : "Voir mon score"}</button>
+    </form>
+    <div id="tmjQuizResult" class="tmj-quiz-result"></div>
+  `;
+
+  document.getElementById("tmjLessonQuizForm").addEventListener("submit",function(e){
+    e.preventDefault();
+    let score=0;
+    quiz.forEach((item,i)=>{
+      const selected=document.querySelector(`input[name="q${i}"]:checked`);
+      if(selected && Number(selected.value)===item.correct) score++;
+    });
+    const result=document.getElementById("tmjQuizResult");
+    result.textContent = lang==="en"
+      ? `Score: ${score}/3`
+      : `Score : ${score}/3`;
+    result.classList.add("show");
+  });
+}
+
+function openLesson(lesson,course){
+  const data=tmjBuildLesson(course,lesson);
+  const {name:levelName,lang}=tmjGetLevel();
+
+  document.getElementById("lessonTitle").textContent="📖 "+data.title;
+  document.getElementById("lessonMeta").textContent =
+    (lang==="en" ? "Level: " : "Niveau : ") + levelName + " • " + course;
+
+  document.getElementById("lessonObjective").innerHTML =
+    `<strong>🎯 ${lang==="en" ? "Learning objective" : "Objectif d'apprentissage"}</strong><p>${tmjEsc(data.objective)}</p>`;
+
+  document.getElementById("lessonText").innerHTML =
+    `<div class="tmj-section-box"><h3>📚 ${lang==="en" ? "Explanation" : "Explication"}</h3><p>${tmjEsc(data.explanation)}</p></div>`;
+
+  document.getElementById("lessonExamples").innerHTML =
+    `<h3>💡 ${lang==="en" ? "Examples" : "Exemples"}</h3><ol>${data.examples.map(x=>`<li>${tmjEsc(x)}</li>`).join("")}</ol>`;
+
+  document.getElementById("lessonExercise").textContent=data.exercise;
+  document.getElementById("lessonAnswer").textContent =
+    (lang==="en" ? "Answer: " : "Correction : ") + data.answer;
+  document.getElementById("lessonAnswer").style.display="none";
+  document.getElementById("showAnswerBtn").style.display="inline-block";
+  document.getElementById("showAnswerBtn").textContent =
+    lang==="en" ? "Show answer" : "Afficher la correction";
+
+  tmjRenderLessonQuiz(course,lesson);
+
+  document.getElementById("lessonModal").classList.add("show");
+  document.body.style.overflow="hidden";
+}
+
+function showAnswer(){
+  const answer=document.getElementById("lessonAnswer");
+  answer.style.display="block";
+}
+
+function closeLesson(){
+  document.getElementById("lessonModal").classList.remove("show");
+  document.body.style.overflow="";
+}
+function closeLesson(){document.getElementById("lessonModal").classList.remove("show")}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeLesson();closeCourse()}})
+function answer(n){document.getElementById("result").textContent=n===56?"✅ Bonne réponse !":"❌ Essaie encore."}
+let english=false;
+function toggleLanguage(){
+english=!english;
+document.querySelector(".lang").textContent=english?"🇫🇷 Français":"🇬🇧 English";
+document.documentElement.lang=english?"en":"fr";
+document.getElementById("heroTitle").textContent=english?"Learn, revise and build your future!":"Apprends, révise et construis ton avenir !";
+document.getElementById("heroText").textContent=english?"TMJ Jeunesse brings together courses, exercises and resources for primary, secondary, high school and technical education.":"TMJ Jeunesse rassemble des cours, exercices et ressources du primaire à l'université, avec des parcours généraux et techniques.";
+document.getElementById("startBtn").textContent=english?"Start learning":"Commencer les cours";
+document.getElementById("pathBtn").textContent=english?"Explore pathways":"Découvrir les filières";
+document.getElementById("spaceTitle").textContent=english?"Your learning space":"Ton espace d'apprentissage";
+document.getElementById("spaceText").textContent=english?"Maths, languages, science, technology, technical studies, economics, entrepreneurship and more.":"Mathématiques, langues, sciences, technologie, technique, économie, entrepreneuriat et bien plus.";
+}
+renderCatalog();
+</script>
+
+
+<style>
+  /* TMJ Jeunesse: mobile menu without browser alerts */
+  @media (max-width: 760px) {
+    header nav.tmj-mobile-open,
+    header nav.mobile-open {
+      display: flex !important;
+      flex-direction: column;
+      gap: 10px;
+      padding: 12px;
+      background: inherit;
+      border-radius: 0 0 16px 16px;
+    }
+  }
+  .tmj-action-message {
+    margin: 14px auto 0;
+    max-width: 760px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: #eef6ff;
+    color: #12345b;
+    font-weight: 600;
+    text-align: center;
+    display: none;
+  }
+  .tmj-action-message.show { display: block; }
+</style>
+
+<script>
+(function () {
+  function showTMJMessage(message) {
+    let box = document.getElementById("tmjActionMessage");
+    if (!box) {
+      box = document.createElement("div");
+      box.id = "tmjActionMessage";
+      box.className = "tmj-action-message";
+      const header = document.querySelector("header");
+      if (header) header.insertAdjacentElement("afterend", box);
+      else document.body.prepend(box);
+    }
+    box.textContent = message;
+    box.classList.add("show");
+    clearTimeout(window.tmjMessageTimer);
+    window.tmjMessageTimer = setTimeout(() => box.classList.remove("show"), 3500);
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const menuBtn = document.getElementById("mobileMenuBtn");
+    const nav = document.querySelector("header nav");
+
+    if (menuBtn && nav) {
+      menuBtn.addEventListener("click", function () {
+        nav.classList.toggle("mobile-open");
+      });
+
+      nav.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", () => nav.classList.remove("mobile-open"));
+      });
+    }
+
+    const joinBtn = document.getElementById("joinBtn");
+    if (joinBtn) {
+      joinBtn.addEventListener("click", function () {
+        const courses = document.getElementById("cours");
+        if (courses) {
+          courses.scrollIntoView({ behavior: "smooth", block: "start" });
+          showTMJMessage(
+            (typeof tmjLanguage !== "undefined" && tmjLanguage === "en")
+              ? "Welcome to TMJ Jeunesse! Choose a course to start learning."
+              : "Bienvenue sur TMJ Jeunesse ! Choisis un cours pour commencer."
+          );
+        }
+      });
+    }
+
+    const exerciseBtn = document.getElementById("exerciseActionBtn");
+    if (exerciseBtn) {
+      exerciseBtn.addEventListener("click", function () {
+        showTMJMessage(
+          (typeof tmjLanguage !== "undefined" && tmjLanguage === "en")
+            ? "Exercise ready. Write your answer, then check the answer when you are ready."
+            : "Exercice prêt. Écris ta réponse, puis affiche la correction quand tu es prêt."
+        );
+      });
+    }
+  });
+})();
+</script>
+
+<script>
+/* TMJ Jeunesse — bilingual interface FR ↔ EN */
+const tmjTranslations = {
+  fr: {
+    navHome:"Accueil", navCourses:"Cours", navTracks:"Filières", navQuiz:"Quiz", navAbout:"À propos",
+    heroTitle:"Apprendre. Comprendre. Réussir.",
+    heroText:"TMJ Jeunesse accompagne les élèves dans leurs apprentissages, du primaire au lycée et dans les filières techniques.",
+    startLearning:"Commencer à apprendre", exploreCourses:"Explorer les cours",
+    coursesTitle:"Nos cours", tracksTitle:"Filières", quizTitle:"Quiz",
+    aboutTitle:"À propos de TMJ Jeunesse", searchPlaceholder:"Rechercher une matière...",
+    seeCourse:"Voir le cours", chapters:"chapitres", lesson:"Leçon",
+    exercise:"Exercice", correction:"Correction", showCorrection:"Afficher la correction",
+    close:"Fermer", back:"Retour", next:"Suivant", previous:"Précédent",
+    chooseLanguage:"Langue", primary:"Primaire", middle:"Collège", high:"Lycée",
+    technical:"Technique", entrepreneurship:"Entrepreneuriat",
+    all:"Toutes", correct:"Correct !", tryAgain:"Essaie encore !",
+    footer:"© 2026 TMJ Jeunesse — Apprendre pour construire l'avenir."
+  },
+  en: {
+    navHome:"Home", navCourses:"Courses", navTracks:"Tracks", navQuiz:"Quiz", navAbout:"About",
+    heroTitle:"Learn. Understand. Succeed.",
+    heroText:"TMJ Jeunesse supports students in their learning, from primary school to high school and technical programs.",
+    startLearning:"Start learning", exploreCourses:"Explore courses",
+    coursesTitle:"Our courses", tracksTitle:"Tracks", quizTitle:"Quiz",
+    aboutTitle:"About TMJ Jeunesse", searchPlaceholder:"Search for a subject...",
+    seeCourse:"View course", chapters:"chapters", lesson:"Lesson",
+    exercise:"Exercise", correction:"Answer", showCorrection:"Show answer",
+    close:"Close", back:"Back", next:"Next", previous:"Previous",
+    chooseLanguage:"Language", primary:"Primary", middle:"Middle School", high:"High School",
+    technical:"Technical", entrepreneurship:"Entrepreneurship",
+    all:"All", correct:"Correct!", tryAgain:"Try again!",
+    footer:"© 2026 TMJ Jeunesse — Learning to build the future."
+  }
+};
+
+let tmjLanguage = localStorage.getItem("tmjLanguage") || "fr";
+
+const tmjTextMap = {
+  "Accueil":"navHome", "Home":"navHome",
+  "Cours":"navCourses", "Courses":"navCourses",
+  "Filières":"navTracks", "Tracks":"navTracks",
+  "À propos":"navAbout", "About":"navAbout",
+  "Commencer à apprendre":"startLearning", "Start learning":"startLearning",
+  "Explorer les cours":"exploreCourses", "Explore courses":"exploreCourses",
+  "Nos cours":"coursesTitle", "Our courses":"coursesTitle",
+  "Filières":"tracksTitle",
+  "À propos de TMJ Jeunesse":"aboutTitle",
+  "Voir le cours":"seeCourse", "View course":"seeCourse",
+  "Afficher la correction":"showCorrection", "Show answer":"showCorrection",
+  "Fermer":"close", "Close":"close",
+  "Retour":"back", "Back":"back",
+  "Suivant":"next", "Next":"next",
+  "Précédent":"previous", "Previous":"previous",
+  "Primaire":"primary", "Primary":"primary",
+  "Collège":"middle", "Middle School":"middle",
+  "Lycée":"high", "High School":"high",
+  "Technique":"technical",
+  "Entrepreneuriat":"entrepreneurship",
+  "Toutes":"all", "All":"all",
+  "Exercice":"exercise", "Exercise":"exercise",
+  "Correction":"correction", "Answer":"correction",
+  "Quiz":"quizTitle"
+};
+
+function tmjTranslatePage() {
+  const t = tmjTranslations[tmjLanguage];
+
+  document.documentElement.lang = tmjLanguage;
+
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (t[key]) el.textContent = t[key];
+  });
+
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+    const key = el.getAttribute("data-i18n-placeholder");
+    if (t[key]) el.placeholder = t[key];
+  });
+
+  document.querySelectorAll("button, a, h1, h2, h3, h4, p, span, label").forEach(el => {
+    if (el.children.length) return;
+    const original = el.getAttribute("data-tmj-original") || el.textContent.trim();
+    if (!original) return;
+    el.setAttribute("data-tmj-original", original);
+    const key = tmjTextMap[original];
+    if (key && t[key]) el.textContent = t[key];
+  });
+
+  const langButton = document.querySelector("[data-language-toggle]");
+  if (langButton) {
+    langButton.textContent = tmjLanguage === "fr" ? "🇬🇧 English" : "🇫🇷 Français";
+    langButton.setAttribute("aria-label", tmjLanguage === "fr" ? "Switch to English" : "Passer au français");
+  }
+
+  document.querySelectorAll("[data-lang-fr]").forEach(el => {
+    el.style.display = tmjLanguage === "fr" ? "" : "none";
+  });
+  document.querySelectorAll("[data-lang-en]").forEach(el => {
+    el.style.display = tmjLanguage === "en" ? "" : "none";
+  });
+}
+
+function toggleTMJLanguage() {
+  tmjLanguage = tmjLanguage === "fr" ? "en" : "fr";
+  localStorage.setItem("tmjLanguage", tmjLanguage);
+  tmjTranslatePage();
+
+  // Re-render catalog/course content if the existing site exposes these functions.
+  if (typeof renderCatalog === "function") renderCatalog();
+  if (typeof renderCourses === "function") renderCourses();
+  if (typeof renderHome === "function") renderHome();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  let btn = document.querySelector("[data-language-toggle]");
+  if (!btn) {
+    btn = document.createElement("button");
+    btn.type = "button";
+    btn.setAttribute("data-language-toggle", "");
+    btn.className = "language-toggle";
+    btn.style.cssText = "cursor:pointer;border:0;border-radius:999px;padding:10px 14px;font-weight:700;";
+    const nav = document.querySelector("header nav, nav");
+    if (nav) nav.appendChild(btn);
+  }
+  btn.addEventListener("click", toggleTMJLanguage);
+  tmjTranslatePage();
+});
+</script>
+
+
+<style>
+.tmj-level-grid .tmj-level-card{
+  border:2px solid transparent;
+  cursor:pointer;
+  text-align:left;
+  transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.tmj-level-grid .tmj-level-card:hover{
+  transform:translateY(-3px);
+  border-color:#1d66d1;
+}
+.tmj-level-filter{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:0 auto 18px;
+  justify-content:center;
+}
+.tmj-level-filter-btn{
+  border:0;
+  border-radius:999px;
+  padding:10px 14px;
+  background:#eef3f8;
+  color:#17324d;
+  font-weight:700;
+  cursor:pointer;
+}
+.tmj-level-filter-btn.active{
+  background:#174a92;
+  color:white;
+}
+.tmj-level-notice{
+  max-width:900px;
+  margin:14px auto 0;
+  padding:12px 16px;
+  border-radius:12px;
+  background:#eef6ff;
+  color:#17324d;
+  font-weight:700;
+  text-align:center;
+}
+</style>
+
+<script>
+(function(){
+  let tmjStudyLevel = localStorage.getItem("tmjStudyLevel") || "all";
+
+  const tmjLevelSubjects = {
+    primary: new Set([
+      "Mathématiques","Français","English","Histoire-Géographie",
+      "Sciences","Culture générale","Communication","Arts",
+      "Éducation physique et sportive","Agriculture & environnement"
+    ]),
+    middle: new Set([
+      "Mathématiques","Français","English","Histoire-Géographie",
+      "Physique-Chimie","Sciences de la vie et de la Terre","Sciences",
+      "Informatique","Technologie","Communication","Español","Arts",
+      "Éducation physique et sportive","Agriculture & environnement"
+    ]),
+    high: new Set([
+      "Mathématiques","Français","English","Histoire-Géographie",
+      "Physique-Chimie","Sciences de la vie et de la Terre","Informatique",
+      "Technologie","Électricité","Électronique","Mécanique","Automatisme",
+      "Maintenance industrielle","Génie civil / BTP","Dessin technique",
+      "Topographie","Automobile","Entrepreneuriat","Économie","Comptabilité",
+      "Gestion","Marketing","Commerce","Finance","Communication","Español",
+      "Philosophie","Arts","Éducation physique et sportive",
+      "Agriculture & environnement","Culture générale"
+    ]),
+    university: new Set([
+      "Mathématiques","Français","English","Histoire-Géographie",
+      "Physique-Chimie","Sciences de la vie et de la Terre","Informatique",
+      "Technologie","Électricité","Électronique","Mécanique","Automatisme",
+      "Maintenance industrielle","Génie civil / BTP","Dessin technique",
+      "Topographie","Automobile","Entrepreneuriat","Économie","Comptabilité",
+      "Gestion","Marketing","Commerce","Finance","Communication","Español",
+      "Philosophie","Arts","Agriculture & environnement","Culture générale"
+    ])
+  };
+
+  const tmjLevelNames = {
+    fr: {
+      all:"Tous les niveaux", primary:"Primaire", middle:"Collège",
+      high:"Lycée", university:"Université"
+    },
+    en: {
+      all:"All levels", primary:"Primary School", middle:"Middle School",
+      high:"High School", university:"University"
+    }
+  };
+
+  function tmjCurrentLang(){
+    return (typeof tmjLanguage !== "undefined") ? tmjLanguage : "fr";
+  }
+
+  function tmjLevelLabel(){
+    return tmjLevelNames[tmjCurrentLang()][tmjStudyLevel] || tmjLevelNames[tmjCurrentLang()].all;
+  }
+
+  function tmjApplyLevelToCatalog(){
+    document.querySelectorAll("#catalog .subject").forEach(card=>{
+      const title = card.querySelector("h3")?.textContent.trim() || "";
+      const allowed = tmjStudyLevel === "all" ||
+        (tmjLevelSubjects[tmjStudyLevel] && tmjLevelSubjects[tmjStudyLevel].has(title));
+      card.style.display = allowed ? "" : "none";
+    });
+
+    // Hide empty category headings/grids after filtering.
+    document.querySelectorAll("#catalog .category").forEach(category=>{
+      const grid = category.nextElementSibling;
+      if(!grid) return;
+      const visible = [...grid.querySelectorAll(".subject")].some(c=>c.style.display !== "none");
+      category.style.display = visible ? "" : "none";
+      grid.style.display = visible ? "" : "none";
+    });
+
+    document.querySelectorAll(".tmj-level-filter-btn").forEach(btn=>{
+      btn.classList.toggle("active", btn.dataset.level === tmjStudyLevel);
+    });
+
+    const notice = document.getElementById("tmjLevelNotice");
+    if(notice){
+      notice.textContent = tmjCurrentLang() === "en"
+        ? "Selected level: " + tmjLevelLabel() + ". Choose a subject below to start learning."
+        : "Niveau sélectionné : " + tmjLevelLabel() + ". Choisis une matière ci-dessous pour commencer.";
+    }
+  }
+
+  window.setStudyLevel = function(level){
+    tmjStudyLevel = level;
+    localStorage.setItem("tmjStudyLevel", level);
+
+    const search = document.getElementById("search");
+    const filter = search ? search.value : "";
+
+    if(typeof window.renderCatalog === "function"){
+      window.renderCatalog(filter);
+    } else {
+      tmjApplyLevelToCatalog();
+    }
+
+    const courses = document.getElementById("cours");
+    if(courses) courses.scrollIntoView({behavior:"smooth", block:"start"});
+  };
+
+  // Keep the original renderer, but apply the chosen educational level afterwards.
+  if(typeof window.renderCatalog === "function" && !window.tmjLevelRendererInstalled){
+    const originalRenderCatalog = window.renderCatalog;
+    window.renderCatalog = function(filter=""){
+      originalRenderCatalog(filter);
+      tmjApplyLevelToCatalog();
+    };
+    window.tmjLevelRendererInstalled = true;
+  }
+
+  // Make the existing bilingual system refresh the level label after a language change.
+  const oldToggle = window.toggleTMJLanguage;
+  if(oldToggle && !window.tmjLevelLanguageHook){
+    window.toggleTMJLanguage = function(){
+      oldToggle();
+      setTimeout(tmjApplyLevelToCatalog, 0);
+    };
+    window.tmjLevelLanguageHook = true;
+  }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    tmjApplyLevelToCatalog();
+  });
+})();
+</script>
+
+
+<script>
+/* TMJ Jeunesse — programmes réellement séparés par niveau */
+const tmjPrograms = {
+  primary: {
+    fr: {
+      title:"Primaire",
+      subtitle:"Fondations : lire, écrire, compter, découvrir le monde et développer les premières compétences.",
+      subjects:[
+        ["Mathématiques","Nombres et calcul","Addition et soustraction","Multiplication et division","Fractions simples","Mesures et unités","Géométrie de base"],
+        ["Français","Lecture","Grammaire","Conjugaison","Orthographe","Vocabulaire","Expression écrite"],
+        ["English","Alphabet and sounds","Basic vocabulary","Greetings and introductions","Simple sentences","Numbers and colours","Everyday English"],
+        ["Sciences","Le corps humain","Les plantes","Les animaux","L'eau et l'air","La matière","Environnement"],
+        ["Histoire-Géographie","Ma famille et ma communauté","Le Cameroun","Les continents","Les paysages","Repères historiques","Citoyenneté"],
+        ["Informatique","Découvrir l'ordinateur","Clavier et souris","Fichiers et dossiers","Internet : premières notions","Sécurité numérique","Créativité numérique"]
+      ]
+    },
+    en: {
+      title:"Primary School",
+      subtitle:"Foundations: reading, writing, mathematics, discovery and first practical skills.",
+      subjects:[
+        ["Mathematics","Numbers and counting","Addition and subtraction","Multiplication and division","Simple fractions","Measurements and units","Basic geometry"],
+        ["French","Reading","Grammar","Conjugation","Spelling","Vocabulary","Writing"],
+        ["English","Alphabet and sounds","Basic vocabulary","Greetings and introductions","Simple sentences","Numbers and colours","Everyday English"],
+        ["Science","The human body","Plants","Animals","Water and air","Matter","Environment"],
+        ["History & Geography","My family and community","Cameroon","Continents","Landscapes","Historical landmarks","Citizenship"],
+        ["Computer Science","Discovering computers","Keyboard and mouse","Files and folders","Internet basics","Digital safety","Digital creativity"]
+      ]
+    }
+  },
+  middle: {
+    fr: {
+      title:"Collège",
+      subtitle:"Consolidation : raisonnement, sciences, langues, culture générale et premières compétences numériques.",
+      subjects:[
+        ["Mathématiques","Nombres relatifs","Fractions et puissances","Calcul littéral","Équations","Géométrie","Proportionnalité","Statistiques"],
+        ["Français","Grammaire avancée","Conjugaison","Analyse de texte","Vocabulaire","Orthographe","Rédaction","Argumentation"],
+        ["English","Grammar","Vocabulary","Reading comprehension","Writing","Speaking","Everyday communication"],
+        ["Physique-Chimie","Mesures et unités","Matière","Mouvements","Électricité","Lumière","Chimie de base"],
+        ["SVT","Cellule","Nutrition","Respiration","Reproduction","Écosystèmes","Santé"],
+        ["Histoire-Géographie","Afrique ancienne","Colonisation","Décolonisation","Population","Climats","Géographie économique"],
+        ["Informatique","Systèmes informatiques","Internet","Algorithmique","Programmation","Données","Cybersécurité"],
+        ["Technologie","Objets techniques","Matériaux","Électricité","Mécanismes","Dessin technique","Projet technique"]
+      ]
+    },
+    en: {
+      title:"Middle School",
+      subtitle:"Consolidation: reasoning, science, languages, general knowledge and digital skills.",
+      subjects:[
+        ["Mathematics","Integers and signed numbers","Fractions and powers","Algebraic expressions","Equations","Geometry","Proportionality","Statistics"],
+        ["French","Advanced grammar","Conjugation","Text analysis","Vocabulary","Spelling","Writing","Argumentation"],
+        ["English","Grammar","Vocabulary","Reading comprehension","Writing","Speaking","Everyday communication"],
+        ["Physics & Chemistry","Measurements and units","Matter","Motion","Electricity","Light","Basic chemistry"],
+        ["Life Sciences","Cells","Nutrition","Respiration","Reproduction","Ecosystems","Health"],
+        ["History & Geography","Ancient Africa","Colonization","Decolonization","Population","Climate","Economic geography"],
+        ["Computer Science","Computer systems","Internet","Algorithms","Programming","Data","Cybersecurity"],
+        ["Technology","Technical objects","Materials","Electricity","Mechanisms","Technical drawing","Technology project"]
+      ]
+    }
+  },
+  high: {
+    fr: {
+      title:"Lycée",
+      subtitle:"Approfondissement : préparation aux examens, spécialisation progressive et compétences professionnelles.",
+      subjects:[
+        ["Mathématiques","Algèbre","Fonctions","Équations et inéquations","Géométrie analytique","Suites","Probabilités","Statistiques","Dérivation"],
+        ["Français","Littérature","Analyse de texte","Argumentation","Dissertation","Commentaire","Expression orale","Préparation aux examens"],
+        ["English","Advanced grammar","Academic vocabulary","Reading","Essay writing","Speaking","Presentation skills","Exam preparation"],
+        ["Physique-Chimie","Mécanique","Électricité","Ondes","Optique","Chimie organique","Réactions chimiques","Énergie"],
+        ["SVT","Génétique","Évolution","Physiologie","Écologie","Microbiologie","Immunité","Environnement"],
+        ["Informatique","Algorithmique avancée","Programmation","Bases de données","Réseaux","Web","Cybersécurité","Projets"],
+        ["Économie","Marché","Offre et demande","Production","Monnaie","Croissance","Commerce international","Développement"],
+        ["Entrepreneuriat","Idée de projet","Étude de marché","Business model","Business plan","Financement","Marketing","Gestion"],
+        ["Technique & Industrie","Électricité","Électronique","Mécanique","Automatisme","Maintenance","Génie civil","Dessin technique","Automobile"]
+      ]
+    },
+    en: {
+      title:"High School",
+      subtitle:"Advanced learning: exam preparation, specialization and professional skills.",
+      subjects:[
+        ["Mathematics","Algebra","Functions","Equations and inequalities","Analytical geometry","Sequences","Probability","Statistics","Differentiation"],
+        ["French","Literature","Text analysis","Argumentation","Essay writing","Commentary","Oral expression","Exam preparation"],
+        ["English","Advanced grammar","Academic vocabulary","Reading","Essay writing","Speaking","Presentation skills","Exam preparation"],
+        ["Physics & Chemistry","Mechanics","Electricity","Waves","Optics","Organic chemistry","Chemical reactions","Energy"],
+        ["Life Sciences","Genetics","Evolution","Physiology","Ecology","Microbiology","Immunity","Environment"],
+        ["Computer Science","Advanced algorithms","Programming","Databases","Networks","Web development","Cybersecurity","Projects"],
+        ["Economics","Markets","Supply and demand","Production","Money","Growth","International trade","Development"],
+        ["Entrepreneurship","Project idea","Market research","Business model","Business plan","Funding","Marketing","Management"],
+        ["Technology & Industry","Electrical engineering","Electronics","Mechanics","Automation","Maintenance","Civil engineering","Technical drawing","Automotive"]
+      ]
+    }
+  },
+  university: {
+    fr: {
+      title:"Université",
+      subtitle:"Études supérieures : connaissances approfondies, méthodes universitaires, recherche et professionnalisation.",
+      subjects:[
+        ["Mathématiques","Analyse","Algèbre linéaire","Probabilités","Statistiques","Calcul différentiel","Optimisation","Modélisation"],
+        ["Informatique","Algorithmique","Programmation","Structures de données","Bases de données","Réseaux","Génie logiciel","Intelligence artificielle","Cybersécurité"],
+        ["Physique","Mécanique","Électromagnétisme","Thermodynamique","Ondes","Physique moderne","Méthodes numériques"],
+        ["Sciences de la vie","Biologie cellulaire","Génétique","Biochimie","Microbiologie","Physiologie","Écologie","Méthodes de laboratoire"],
+        ["Économie","Microéconomie","Macroéconomie","Économétrie","Finance","Économie du développement","Commerce international"],
+        ["Gestion & Comptabilité","Comptabilité","Finance d'entreprise","Management","Marketing","Gestion de projet","Contrôle de gestion","Audit"],
+        ["Entrepreneuriat","Innovation","Étude de marché","Business model","Business plan","Financement","Stratégie","Création d'entreprise"],
+        ["Génie & Technique","Électricité","Électronique","Automatique","Mécanique","Génie civil","Maintenance","Conception technique","Projet d'ingénierie"]
+      ]
+    },
+    en: {
+      title:"University",
+      subtitle:"Higher education: advanced knowledge, academic methods, research and professional development.",
+      subjects:[
+        ["Mathematics","Analysis","Linear algebra","Probability","Statistics","Differential calculus","Optimization","Mathematical modelling"],
+        ["Computer Science","Algorithms","Programming","Data structures","Databases","Networks","Software engineering","Artificial intelligence","Cybersecurity"],
+        ["Physics","Mechanics","Electromagnetism","Thermodynamics","Waves","Modern physics","Numerical methods"],
+        ["Life Sciences","Cell biology","Genetics","Biochemistry","Microbiology","Physiology","Ecology","Laboratory methods"],
+        ["Economics","Microeconomics","Macroeconomics","Econometrics","Finance","Development economics","International trade"],
+        ["Management & Accounting","Accounting","Corporate finance","Management","Marketing","Project management","Management control","Auditing"],
+        ["Entrepreneurship","Innovation","Market research","Business model","Business plan","Funding","Strategy","Business creation"],
+        ["Engineering & Technology","Electrical engineering","Electronics","Automation","Mechanical engineering","Civil engineering","Maintenance","Technical design","Engineering project"]
+      ]
+    }
+  }
+};
+
+function tmjRenderLevelProgram(level){
+  const lang = (typeof tmjLanguage !== "undefined") ? tmjLanguage : "fr";
+  const data = tmjPrograms[level]?.[lang];
+  const container = document.getElementById("tmjProgramPanel");
+  if(!container || !data) return;
+
+  container.innerHTML = `
+    <div class="tmj-program-header">
+      <div class="tmj-program-icon">${level==="primary"?"📘":level==="middle"?"🏫":level==="high"?"🎓":"🏛️"}</div>
+      <div><h2>${data.title}</h2><p>${data.subtitle}</p></div>
+    </div>
+    <div class="tmj-program-grid">
+      ${data.subjects.map((s,i)=>`
+        <article class="tmj-program-card">
+          <h3>${s[0]}</h3>
+          <ol>${s.slice(1).map(ch=>`<li>${ch}</li>`).join("")}</ol>
+          <button type="button" onclick="tmjOpenProgramSubject('${level}',${i})">
+            ${lang==="en"?"Open subject":"Ouvrir la matière"} →
+          </button>
+        </article>`).join("")}
+    </div>
+  `;
+  container.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+window.tmjOpenProgramSubject = function(level,index){
+  const lang = (typeof tmjLanguage !== "undefined") ? tmjLanguage : "fr";
+  const data = tmjPrograms[level]?.[lang];
+  const subject = data?.subjects[index];
+  if(!subject) return;
+
+  const title = subject[0];
+  const chapters = subject.slice(1);
+  const icon = level==="primary" ? "📘" : level==="middle" ? "🏫" : level==="high" ? "🎓" : "🏛️";
+
+  const intro = lang==="en"
+    ? `${title} — ${data.title}. This course is organized into ${chapters.length} progressive chapters adapted to this level.`
+    : `${title} — ${data.title}. Ce cours contient ${chapters.length} chapitres progressifs adaptés à ce niveau.`;
+
+  const lessonButtons = chapters.map((chapter,i) => {
+    const safeChapter = JSON.stringify(chapter);
+    const safeTitle = JSON.stringify(title);
+    return `<button class="lesson" type="button" onclick='openLesson(${safeChapter},${safeTitle})'>📖 ${i+1}. ${chapter}</button>`;
+  }).join("");
+
+  const modal = document.getElementById("courseModal");
+  if(!modal) return;
+
+  document.getElementById("courseTitle").textContent = icon + " " + title;
+  document.getElementById("courseIntro").textContent = intro;
+  document.getElementById("lessonList").innerHTML = lessonButtons;
+  document.getElementById("courseExercise").textContent =
+    lang==="en"
+      ? `Choose a chapter above, study the lesson, then complete the exercise.`
+      : `Choisis un chapitre ci-dessus, étudie la leçon, puis fais l'exercice.`;
+
+  modal.classList.add("show");
+  document.body.style.overflow="hidden";
+};
+</script>
+
+<style>
+#tmjProgramPanel{
+  max-width:1100px;
+  margin:22px auto 50px;
+}
+.tmj-program-header{
+  display:flex;
+  gap:16px;
+  align-items:center;
+  padding:22px;
+  border-radius:20px;
+  background:#eef6ff;
+  margin-bottom:18px;
+}
+.tmj-program-icon{font-size:44px}
+.tmj-program-header h2{margin:0 0 6px}
+.tmj-program-header p{margin:0;line-height:1.55}
+.tmj-program-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:16px;
+}
+.tmj-program-card{
+  background:#fff;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 4px 18px rgba(0,0,0,.08);
+}
+.tmj-program-card h3{margin-top:0}
+.tmj-program-card li{margin:7px 0}
+.tmj-program-card button{min-width:160px;
+  margin-top:10px;
+  border:0;
+  border-radius:10px;
+  padding:10px 14px;
+  background:#174a92;
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+</style>
+
+
+<script>
+(function(){
+  function refreshProgramAfterLanguage(){
+    const level = localStorage.getItem("tmjStudyLevel");
+    if(level && level !== "all" && typeof tmjRenderLevelProgram === "function"){
+      setTimeout(()=>tmjRenderLevelProgram(level), 30);
+    }
+  }
+  document.addEventListener("DOMContentLoaded", refreshProgramAfterLanguage);
+})();
+</script>
+
+</body>
+</html>
